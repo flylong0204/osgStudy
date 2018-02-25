@@ -1,2 +1,2 @@
 # NPSTutorial
-根据NPSTutorials来熟悉OSG，使用最新的OSG测试
+根据NPSTutorials代码整理来，用来学习。
