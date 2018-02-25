@@ -5,8 +5,12 @@
 #include <osg/Texture2D>
 #include <osgDB/ReadFile> 
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 //#include <osgProducer/Viewer>
 #include <osg/PositionAttitudeTransform>
+
+#include "../Util/Axis.h"
+#include <osg/CullFace>
 
 int main()
 {
@@ -94,6 +98,8 @@ int main()
 	pyramidFaceFour->push_back(4);
 	pyramidGeometry->addPrimitiveSet(pyramidFaceFour);
 
+	pyramidGeometry->getOrCreateStateSet()->setAttribute(
+		new osg::CullFace(osg::CullFace::FRONT_AND_BACK));
 	//Declare and load an array of Vec4 elements to store colors. 
 
 	osg::Vec4Array* colors = new osg::Vec4Array;
@@ -101,6 +107,7 @@ int main()
 	colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f) ); //index 1 green
 	colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f) ); //index 2 blue
 	colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f) ); //index 3 white
+	colors->push_back(osg::Vec4(1.0f, 0.0f, 1.0f, 1.0f));  //index 4 white
 
 	//Declare the variable that will match vertex array elements to color 
 	//array elements. This vector should have the same number of elements 
@@ -128,9 +135,9 @@ int main()
 	//assign the color indices created above to the geometry and set the 
 	//binding mode to _PER_VERTEX.
 
-	pyramidGeometry->setColorArray(colors);
+	pyramidGeometry->setColorArray(colors, osg::Array::BIND_PER_VERTEX);
 	//pyramidGeometry->setColorIndices(colorIndexArray);
-	pyramidGeometry->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
+	//pyramidGeometry->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
 
 	//Now that we have created a geometry node and added it to the scene 
 	//we can reuse this geometry. For example, if we wanted to put a 
@@ -153,6 +160,10 @@ int main()
 
 	osg::Vec3 pyramidTwoPosition(15,0,0);
 	pyramidTwoXForm->setPosition( pyramidTwoPosition ); 
+
+	root->addChild(Axis::createAxis(1.0f, 1.0f, 1.0f));
+
+	viewer.addEventHandler(new osgViewer::StatsHandler);
 
 	//The final step is to set up and enter a simulation loop.
 

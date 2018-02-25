@@ -10,6 +10,7 @@
 #include <osgText/Text>
 #include <osgGA/GUIEventHandler>
 #include <osg/io_utils>
+#include "../Util/Axis.h"
 
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
@@ -84,52 +85,12 @@ private:
 	osg::ref_ptr<osgText::Text> mText;
 };
 
-osg::Node* createAxis()
-{
-	osg::ref_ptr<osg::Geode> geode = new osg::Geode;
-	osg::ref_ptr<osg::Geometry> geometry(new osg::Geometry());
-
-	osg::ref_ptr<osg::Vec3Array> vertices(new osg::Vec3Array());
-	vertices->push_back(osg::Vec3(0.0, 0.0, 0.0));
-	vertices->push_back(osg::Vec3(1.0, 0.0, 0.0));
-	vertices->push_back(osg::Vec3(0.0, 0.0, 0.0));
-	vertices->push_back(osg::Vec3(0.0, 1.0, 0.0));
-	vertices->push_back(osg::Vec3(0.0, 0.0, 0.0));
-	vertices->push_back(osg::Vec3(0.0, 0.0, 1.0));
-	geometry->setVertexArray(vertices.get());
-
-	osg::ref_ptr<osg::Vec4Array> colors(new osg::Vec4Array());
-	colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));  // x -- red
-	colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f)); // y - green
-	colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
-	colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f)); // z -blue
-	colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
-	geometry->setColorArray(colors.get(), osg::Array::BIND_PER_VERTEX);
-	geometry->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::LINES, 0, 6));
-
-	if (true)
-	{
-		osg::ref_ptr<osgText::Text> text = new osgText::Text;
-		osg::Vec3 position(1.0f, 0.0f, 0.0f);
-		text->setPosition(position);
-		text->setColor(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
-		text->setText(L"x");
-		text->setCharacterSize(0.8f);
-		geode->addDrawable(text);
-	}
-
-	geode->addDrawable(geometry.get());
-	geode->getOrCreateStateSet()->setMode(GL_LIGHTING, false);
-	return geode.release();
-}
-
 class AxisCamera : public osg::Camera
 {
 public:
 	AxisCamera()
 	{
-		addChild(createAxis());
+		addChild(Axis::createAxis(1.0f, 1.0f, 1.0f));
 	}
 
 	AxisCamera(AxisCamera const& copy, osg::CopyOp copyOp = osg::CopyOp::SHALLOW_COPY)
