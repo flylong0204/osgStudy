@@ -1,0 +1,50 @@
+PROJECT(NPSTutorial)
+
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
+SET(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "add a postfix for Debug mode, usually d on windows")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib)
+
+IF(COMMAND CMAKE_POLICY)
+    CMAKE_POLICY(SET CMP0003 NEW)
+ENDIF(COMMAND CMAKE_POLICY)
+
+INCLUDE(CheckIncludeFiles)
+FIND_PATH(OPENSCENEGRAPH_INCLUDE_DIR osg/Referenced
+    PATHS
+    $ENV{OSG_ROOT}/include
+    $ENV{OSG_DIR}/include
+)
+
+FIND_PATH(OPENSCENEGRAPH_LIB_DIR osg.lib
+    PATHS
+    $ENV{OSG_ROOT}/lib
+    $ENV{OSG_DIR}/lib
+)
+
+INCLUDE_DIRECTORIES(common ${OPENSCENEGRAPH_INCLUDE_DIR})
+LINK_DIRECTORIES(${OPENSCENEGRAPH_LIB_DIR})
+
+MACRO(START_EXAMPLE)
+
+    INCLUDE_DIRECTORIES(${EXTERNAL_INCLUDE_DIR})
+    ADD_EXECUTABLE(${EXAMPLE_NAME} ${EXAMPLE_FILES})
+    SET_TARGET_PROPERTIES(${EXAMPLE_NAME} PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
+    
+    TARGET_LINK_LIBRARIES(${EXAMPLE_NAME}
+        debug osg${CMAKE_DEBUG_POSTFIX}          optimized osg
+        debug osgAnimation${CMAKE_DEBUG_POSTFIX} optimized osgAnimation
+        debug osgParticle${CMAKE_DEBUG_POSTFIX}  optimized osgParticle
+        debug osgDB${CMAKE_DEBUG_POSTFIX}        optimized osgDB
+        debug osgGA${CMAKE_DEBUG_POSTFIX}        optimized osgGA
+        debug osgText${CMAKE_DEBUG_POSTFIX}      optimized osgText
+        debug osgUtil${CMAKE_DEBUG_POSTFIX}      optimized osgUtil
+        debug osgViewer${CMAKE_DEBUG_POSTFIX}    optimized osgViewer
+        debug OpenThreads${CMAKE_DEBUG_POSTFIX}  optimized OpenThreads
+        ${EXTERNAL_LIBRARIES}
+    )
+    INSTALL(TARGETS ${EXAMPLE_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
+ENDMACRO(START_EXAMPLE)
+
+ADD_SUBDIRECTORY(tutorial_01)

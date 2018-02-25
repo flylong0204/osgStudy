@@ -1,0 +1,6 @@
+# tutorial 01
+SET(EXAMPLE_NAME tutorial01)
+SET(EXAMPLE_FILES 
+	hyyTEST.cpp
+	)
+START_EXAMPLE()
