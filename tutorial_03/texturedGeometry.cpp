@@ -6,7 +6,10 @@
 #include <osgDB/ReadFile> 
 //#include <osgProducer/Viewer>
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 #include <osg/PositionAttitudeTransform>
+
+#include "../Util/Axis.h"
 
 osg::Geode* createPyramid()
 {
@@ -112,7 +115,7 @@ osg::TextureCubeMap* readCubeMap()
 	osg::TextureCubeMap* cubemap = new osg::TextureCubeMap;
 	//#define CUBEMAP_FILENAME(face) "nvlobby_" #face ".png"
 	//#define CUBEMAP_FILENAME(face) "Cubemap_axis/" #face ".png"
-#define CUBEMAP_FILENAME(face) "../asserts/textures/skyBmp/" #face ".bmp"
+#define CUBEMAP_FILENAME(face) "../asserts/nps/skyBmp/" #face ".bmp"
 	/*osgDB::FilePathList pathList = osgDB::getDataFilePathList();
 	pathList.push_back("..\\data\\T72-tank\\");
 	osgDB::setDataFilePathList(pathList);*/
@@ -311,13 +314,14 @@ int main()
    root->addChild(createLights(root->getOrCreateStateSet()));
    
    root->addChild(pyramidGeode);
+   root->addChild(Axis::createAxis(1.0f, 1.0f, 1.0f));
 
    osg::Texture2D* KLN89FaceTexture = new osg::Texture2D;
    // protect from being optimized away as static state:
    KLN89FaceTexture->setDataVariance(osg::Object::DYNAMIC); 
 
    // load an image by reading a file: 
-   osg::Image* klnFace = osgDB::readImageFile("../asserts/textures/KLN89FaceB.tga");
+   osg::Image* klnFace = osgDB::readImageFile("../asserts/nps/KLN89FaceB.tga");
    if (!klnFace)
    {
       std::cout << " couldn't find texture, quiting." << std::endl;
@@ -346,6 +350,7 @@ int main()
 
    viewer.realize();
 
+   viewer.addEventHandler(new osgViewer::StatsHandler);
    //while( !viewer.done() )
    //{
    //   viewer.sync();

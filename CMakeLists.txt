@@ -38,7 +38,8 @@ MACRO(START_EXAMPLE)
         debug osgDB${CMAKE_DEBUG_POSTFIX}        optimized osgDB
         debug osgGA${CMAKE_DEBUG_POSTFIX}        optimized osgGA
         debug osgText${CMAKE_DEBUG_POSTFIX}      optimized osgText
-        debug osgUtil${CMAKE_DEBUG_POSTFIX}      optimized osgUtil
+        debug osgSim${CMAKE_DEBUG_POSTFIX}       optimized osgSim
+		debug osgUtil${CMAKE_DEBUG_POSTFIX}      optimized osgUtil
         debug osgViewer${CMAKE_DEBUG_POSTFIX}    optimized osgViewer
         debug OpenThreads${CMAKE_DEBUG_POSTFIX}  optimized OpenThreads
         ${EXTERNAL_LIBRARIES}
@@ -50,4 +51,15 @@ ENDMACRO(START_EXAMPLE)
 ADD_SUBDIRECTORY(tutorial_01)
 ADD_SUBDIRECTORY(tutorial_02)
 ADD_SUBDIRECTORY(tutorial_03)
+ADD_SUBDIRECTORY(tutorial_04)
+ADD_SUBDIRECTORY(tutorial_05)
+ADD_SUBDIRECTORY(tutorial_06)
+ADD_SUBDIRECTORY(tutorial_07)
+ADD_SUBDIRECTORY(tutorial_08)
+ADD_SUBDIRECTORY(tutorial_09)
+ADD_SUBDIRECTORY(tutorial_10)
+ADD_SUBDIRECTORY(tutorial_11a)
+ADD_SUBDIRECTORY(tutorial_11b)
+ADD_SUBDIRECTORY(tutorial_11c)
+ADD_SUBDIRECTORY(tutorial_12)
 ADD_SUBDIRECTORY(other_hud)

@@ -1,7 +1,7 @@
 # tutorial
-SET(EXAMPLE_NAME tutorial03)
+SET(EXAMPLE_NAME tutorial11a)
 SET(EXAMPLE_FILES 
-	texturedGeometry.cpp
+	TestNodeFollower.cpp
 	../Util/Axis.h
 	)
 START_EXAMPLE()
