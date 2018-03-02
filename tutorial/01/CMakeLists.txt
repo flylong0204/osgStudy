@@ -2,7 +2,6 @@
 SET(EXAMPLE_NAME 01Test)
 SET(EXAMPLE_FILES 
 	hyyTEST.cpp
-	../../Util/Axis.h
 	)
 START_EXAMPLE()
 IF(MSVC)

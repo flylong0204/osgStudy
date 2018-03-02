@@ -1,17 +1,17 @@
+
 #include <osg/Node>
 #include <osg/Group>
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osg/Texture2D>
 #include <osgDB/ReadFile> 
-//#include <osgProducer/Viewer>
 #include <osgViewer/Viewer>
 #include <osg/PositionAttitudeTransform>
+#include "../../Util/Axis.h"
 
 int main()
 {
-   //osgProducer::Viewer viewer;
-	osgViewer::Viewer viewer;
+    osgViewer::Viewer viewer;
    osg::Group* root = new osg::Group();
    osg::Geode* pyramidGeode = new osg::Geode();
    osg::Geometry* pyramidGeometry = new osg::Geometry();
@@ -102,42 +102,19 @@ int main()
    colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f) ); //index 2 blue
    colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f) ); //index 3 white
 
-   //Declare the variable that will match vertex array elements to color 
-   //array elements. This vector should have the same number of elements 
-   //as the number of vertices. This vector serves as a link between 
-   //vertex arrays and color arrays. Entries in this index array 
-   //coorespond to elements in the vertex array. Their values coorespond 
-   //to the index in he color array. This same scheme would be followed 
-   //if vertex array elements were matched with normal or texture 
-   //coordinate arrays.
-   //   Note that in this case, we are assigning 5 vertices to four 
-   //   colors. Vertex array element zero (bottom left) and four (peak) 
-   //   are both assigned to color array element zero (red).
-
-   osg::TemplateIndexArray
-      <unsigned int, osg::Array::UIntArrayType,4,4> *colorIndexArray;
-   colorIndexArray = 
-      new osg::TemplateIndexArray<unsigned int, osg::Array::UIntArrayType,4,4>;
-   colorIndexArray->push_back(0); // vertex 0 assigned color array element 0
-   colorIndexArray->push_back(1); // vertex 1 assigned color array element 1
-   colorIndexArray->push_back(2); // vertex 2 assigned color array element 2
-   colorIndexArray->push_back(3); // vertex 3 assigned color array element 3
-   colorIndexArray->push_back(0); // vertex 4 assigned color array element 0
-
+   /*!
+     bind的操作全部被遗弃了，放置在array对象中了，分离了数据与容器之间的关系
+   */
    //The next step is to associate the array of colors with the geometry, 
    //assign the color indices created above to the geometry and set the 
    //binding mode to _PER_VERTEX.
 
    pyramidGeometry->setColorArray(colors, osg::Array::BIND_PER_VERTEX);
-   //pyramidGeometry->setColorIndices(colorIndexArray);
-   //pyramidGeometry->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
    
-   //Now that we have created a geometry node and added it to the scene 
-   //we can reuse this geometry. For example, if we wanted to put a 
-   //second pyramid 15 units to the right of the first one, we could add 
-   //this geode as the child of a transform node in our scene graph. 
-
-   // Declare and initialize a transform node.
+   /*!
+     PositionAttitudeTransform可以让一个节点node可以多个位置设置，
+	 相同的node渲染的速度就非常高了，
+   */
    osg::PositionAttitudeTransform* pyramidTwoXForm =
       new osg::PositionAttitudeTransform();
 
@@ -154,20 +131,15 @@ int main()
    osg::Vec3 pyramidTwoPosition(15,0,0);
    pyramidTwoXForm->setPosition( pyramidTwoPosition ); 
 
-   //The final step is to set up and enter a simulation loop.
+   root->addChild(Util::Axis::createAxis(1.0f, 1.0f, 1.0f));
 
-   //viewer.setUpViewer(osgProducer::Viewer::STANDARD_SETTINGS);
+   //The final step is to set up and enter a simulation loop.
    viewer.setUpViewInWindow(100, 100, 800, 600);
    viewer.setSceneData( root );
 
    viewer.realize();
 
-   //while( !viewer.done() )
-   //{
-   //   viewer.sync();
-   //   viewer.update();
-   //   viewer.frame();
-   //} 
    viewer.run();
+   
    return 0;
 }

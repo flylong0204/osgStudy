@@ -2,7 +2,6 @@
 SET(EXAMPLE_NAME 03TextureGeometry)
 SET(EXAMPLE_FILES 
 	texturedGeometry.cpp
-	../../Util/Axis.h
 	)
 START_EXAMPLE()
 IF(MSVC)

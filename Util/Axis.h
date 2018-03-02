@@ -8,6 +8,7 @@
 #include <osg/Node>
 #include <osg/Geometry>
 #include <osg/Geode>
+#include <osg/Array>
 
 namespace Util
 {

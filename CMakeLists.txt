@@ -68,3 +68,8 @@ OPTION(BUILD_OSG_TESTS "Enable to build NPS Tutorials" ON)
 IF   (BUILD_OSG_TESTS)
 	ADD_SUBDIRECTORY(tests)
 ENDIF()
+
+OPTION(BUILD_OSG_3RDPARTY "Enable to build with 3rdParty library" ON)
+IF   (BUILD_OSG_3RDPARTY)
+	ADD_SUBDIRECTORY(3rdParty)
+ENDIF()

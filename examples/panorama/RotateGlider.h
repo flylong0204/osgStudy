@@ -3,7 +3,6 @@
 #define ROTATE_GLIDER_H 1
 
 #include <osgGA/GUIEventHandler>
-#include <osg/MatrixTransform>
 
 class CRotateGlider : public osgGA::GUIEventHandler
 {

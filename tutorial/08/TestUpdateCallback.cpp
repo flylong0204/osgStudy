@@ -2,7 +2,6 @@
 #include <osg/Node>
 #include <osgDB/ReadFile>
 #include "osgDB/FileUtils"
-//#include <osgProducer/Viewer>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgSim/DOFTransform>
@@ -73,14 +72,12 @@ int main()
 {
    osg::Node* tankNode = NULL;
    osg::Group* root = new osg::Group();
-   //osgProducer::Viewer viewer;
    osgViewer::Viewer viewer;
 
    tankNode = osgDB::readNodeFile("../asserts/nps/T72-tank/t72-tank_des.flt");
    osgDB::FilePathList pathlist = osgDB::getDataFilePathList();
    pathlist.push_back("../asserts/nps/T72-tank/");   
    osgDB::setDataFilePathList(pathlist);
-   //tankNode = osgDB::readNodeFile("NewT72.osg");
    root->addChild(tankNode);
 
    tankDataType* tankData = new tankDataType(tankNode);
