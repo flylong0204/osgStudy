@@ -8,3 +8,6 @@
 
 # tests
 用来测试osg的相关使用的例子
+
+# 其他参考源
+osgRecipes ：https://github.com/xarray/osgRecipes
