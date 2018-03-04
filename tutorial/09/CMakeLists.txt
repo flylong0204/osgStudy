@@ -6,7 +6,6 @@ SET(EXAMPLE_FILES
 	../Util/KeyboardHandler.cpp
 	../Util/findNodeVisitor.h
 	../Util/findNodeVisitor.cpp
-	../../Util/Axis.h
 	)
 START_EXAMPLE()
 IF(MSVC)

@@ -19,9 +19,9 @@ int main( int argc, char **argv )
       new osg::PositionAttitudeTransform();
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
-   pathList.push_back("../asserts/nps/JoeDirt/");
-   pathList.push_back("../asserts/nps/");
+   pathList.push_back("../nps/T72-tank/");
+   pathList.push_back("../nps/JoeDirt/");
+   pathList.push_back("../nps/");
    osgDB::setDataFilePathList(pathList);
 
 
@@ -55,8 +55,8 @@ int main( int argc, char **argv )
    osg::Shader* brickVertexObject =  new osg::Shader( osg::Shader::VERTEX );
    osg::Shader* brickFragmentObject = new osg::Shader( osg::Shader::FRAGMENT );
 
-   bool ok = loadShaderSource( brickVertexObject, "../asserts/nps/shaders/bumpmap.vert" )
-          && loadShaderSource( brickFragmentObject, "../asserts/nps/shaders/bumpmap.frag" ) ;
+   bool ok = loadShaderSource( brickVertexObject, "../nps/shaders/bumpmap.vert" )
+          && loadShaderSource( brickFragmentObject, "../nps/shaders/bumpmap.frag" ) ;
 
    if(!ok)
    {

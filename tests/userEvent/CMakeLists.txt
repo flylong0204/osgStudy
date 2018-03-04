@@ -1,5 +1,5 @@
 # 
-SET(EXAMPLE_NAME userEvent)
+SET(EXAMPLE_NAME testUserEvent)
 SET(EXAMPLE_FILES 
 	main.cpp
 	)

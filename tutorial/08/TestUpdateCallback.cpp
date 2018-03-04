@@ -74,9 +74,9 @@ int main()
    osg::Group* root = new osg::Group();
    osgViewer::Viewer viewer;
 
-   tankNode = osgDB::readNodeFile("../asserts/nps/T72-tank/t72-tank_des.flt");
+   tankNode = osgDB::readNodeFile("../nps/T72-tank/t72-tank_des.flt");
    osgDB::FilePathList pathlist = osgDB::getDataFilePathList();
-   pathlist.push_back("../asserts/nps/T72-tank/");   
+   pathlist.push_back("../nps/T72-tank/");   
    osgDB::setDataFilePathList(pathlist);
    root->addChild(tankNode);
 

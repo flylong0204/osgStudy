@@ -41,8 +41,8 @@ bool setupScene(osg::ref_ptr<osg::Group> &rootNode,osg::ref_ptr<osg::Group> &own
       return false;
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
-   pathList.push_back("../asserts/nps/JoeDirt/");
+   pathList.push_back("../nps/T72-tank/");
+   pathList.push_back("../nps/JoeDirt/");
    osgDB::setDataFilePathList(pathList);
 
    rootNode = new osg::Group();

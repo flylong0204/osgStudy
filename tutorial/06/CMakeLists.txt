@@ -2,7 +2,6 @@
 SET(EXAMPLE_NAME 06HUD)
 SET(EXAMPLE_FILES 
 	SimpleHUD.cpp
-	../../Util/Axis.h
 	)
 START_EXAMPLE()
 IF(MSVC)

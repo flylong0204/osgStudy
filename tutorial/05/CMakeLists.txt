@@ -2,7 +2,6 @@
 SET(EXAMPLE_NAME 05LoadModel)
 SET(EXAMPLE_FILES 
 	TestTutorial.cpp
-	../../Util/Axis.h
 	)
 START_EXAMPLE()
 IF(MSVC)

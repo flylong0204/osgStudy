@@ -32,8 +32,8 @@ int main()
    osg::PositionAttitudeTransform* tankXform;
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
-   pathList.push_back("../asserts/nps/JoeDirt/");
+   pathList.push_back("../nps/T72-tank/");
+   pathList.push_back("../nps/JoeDirt/");
    osgDB::setDataFilePathList(pathList);
 
    groundNode = osgDB::readNodeFile("JoeDirt.flt");

@@ -24,7 +24,7 @@ bool addTextLabel(osg::Group* g, std::string s)
    textLabelGeode->addDrawable(textOne);
 
    textOne->setCharacterSize(1);
-   textOne->setFont("../asserts/fonts/simfang.ttf");
+   textOne->setFont("../fonts/simfang.ttf");
    textOne->setText(s);
    textOne->setAxisAlignment(osgText::Text::XZ_PLANE);
    //textOne->setColor( osg::Vec4(.5,.5,.25,1.0f) );
@@ -181,8 +181,8 @@ int main( int argc, char **argv )
    osg::Group* rootNode = new osg::Group;
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
-   pathList.push_back("../asserts/nps/JoeDirt/");
+   pathList.push_back("../nps/T72-tank/");
+   pathList.push_back("../nps/JoeDirt/");
    osgDB::setDataFilePathList(pathList);
 
    osg::Node* terrainNode = osgDB::readNodeFile("JoeDirt.flt");

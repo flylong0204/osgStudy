@@ -4,7 +4,6 @@ SET(EXAMPLE_FILES
 	WorkingTwoCamera.cpp
 	../Util/TransformAccumulator.h
 	../Util/TransformAccumulator.cpp
-	../Util/Util.h
 	)
 START_EXAMPLE()
 IF(MSVC)

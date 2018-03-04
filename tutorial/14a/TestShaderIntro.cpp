@@ -17,8 +17,8 @@ int main( int argc, char **argv )
    osg::PositionAttitudeTransform* tankXform = new osg::PositionAttitudeTransform();
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
-   pathList.push_back("../asserts/nps/JoeDirt/");
+   pathList.push_back("../nps/T72-tank/");
+   pathList.push_back("../nps/JoeDirt/");
    osgDB::setDataFilePathList(pathList);
 
    tankNode = osgDB::readNodeFile("T72-tank_des.flt");
@@ -50,8 +50,8 @@ int main( int argc, char **argv )
    osg::Shader* brickFragmentObject = new osg::Shader( osg::Shader::FRAGMENT );
    brickProgramObject->addShader( brickVertexObject );
    brickProgramObject->addShader( brickFragmentObject );   
-   loadShaderSource( brickVertexObject, "../asserts/nps/shaders/brick.vert" );
-   loadShaderSource( brickFragmentObject, "../asserts/nps/shaders/brick.frag" );
+   loadShaderSource( brickVertexObject, "../nps/shaders/brick.vert" );
+   loadShaderSource( brickFragmentObject, "../nps/shaders/brick.frag" );
 
    brickState->setAttributeAndModes(brickProgramObject, osg::StateAttribute::ON);
 

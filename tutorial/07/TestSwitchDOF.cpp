@@ -2,7 +2,6 @@
 #include <osgDB/ReadFile> 
 #include <osgDB/FileUtils>
 #include <osg/PositionAttitudeTransform>
-//#include <osgProducer/Viewer>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgSim/DOFTransform>
@@ -13,7 +12,29 @@
 #include <osgText/Text>
 
 // helper function to add a text label below a 'group'
-bool addTextLabel(osg::Group* g, std::string s);
+bool addTextLabel(osg::Group* g, std::string s)
+{
+	if (!g)
+	{
+		return false;
+	}
+	osg::Geode* textLabelGeode = new osg::Geode();
+	osgText::Text* textOne = new osgText::Text();
+	g->addChild(textLabelGeode);
+	textLabelGeode->addDrawable(textOne);
+
+	textOne->setCharacterSize(1);
+	textOne->setFont("../fonts/simfang.ttf");
+	textOne->setText(s);
+	textOne->setAxisAlignment(osgText::Text::XZ_PLANE);
+	textOne->setColor(osg::Vec4(1, 0, 0, 1.0f));
+	textOne->setPosition(osg::Vec3(0, 0, -1));
+	//textOne->setDrawMode(osgText::Text::TEXT |
+	//                          osgText::Text::ALIGNMENT | 
+	//                             osgText::Text::BOUNDINGBOX);
+	textOne->setAlignment(osgText::Text::CENTER_BOTTOM);
+	return true;
+}
 
 int main()
 {
@@ -24,11 +45,10 @@ int main()
    osg::Group* tankTwoGroup = NULL;
    osg::Group* tankThreeGroup = NULL;
 
-   //osgProducer::Viewer viewer;
    osgViewer::Viewer viewer;
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
+   pathList.push_back("../nps/T72-tank/");
    osgDB::setDataFilePathList(pathList);
 
    // Load the models from the same file
@@ -146,28 +166,4 @@ int main()
    viewer.run();
 
    return 0;
-}
-
-bool addTextLabel(osg::Group* g, std::string s)
-{
-   if (!g)
-   {
-      return false;
-   }
-   osg::Geode* textLabelGeode = new osg::Geode();
-   osgText::Text* textOne = new osgText::Text();
-   g->addChild(textLabelGeode);
-   textLabelGeode->addDrawable(textOne);
-
-   textOne->setCharacterSize(1);
-   textOne->setFont("../asserts/fonts/simfang.ttf");
-   textOne->setText(s);
-   textOne->setAxisAlignment(osgText::Text::XZ_PLANE);
-   textOne->setColor( osg::Vec4(1,0,0,1.0f) );
-   textOne->setPosition( osg::Vec3(0,0,-1) );
-   //textOne->setDrawMode(osgText::Text::TEXT |
-   //                          osgText::Text::ALIGNMENT | 
-   //                             osgText::Text::BOUNDINGBOX);
-   textOne->setAlignment(osgText::Text::CENTER_BOTTOM);
-   return true;
 }

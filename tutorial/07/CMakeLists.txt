@@ -4,7 +4,6 @@ SET(EXAMPLE_FILES
 	TestSwitchDOF.cpp
 	../Util/findNodeVisitor.h
 	../Util/findNodeVisitor.cpp
-	../../Util/Axis.h
 	)
 START_EXAMPLE()
 IF(MSVC)

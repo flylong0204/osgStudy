@@ -1,5 +1,5 @@
 # 
-SET(EXAMPLE_NAME addUnderEvent)
+SET(EXAMPLE_NAME testAddUnderEvent)
 SET(EXAMPLE_FILES 
 	main.cpp
 	)

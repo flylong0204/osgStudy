@@ -1,5 +1,5 @@
 # 
-SET(EXAMPLE_NAME blockOpenThread)
+SET(EXAMPLE_NAME testBlockOpenThread)
 SET(EXAMPLE_FILES 
 	main.cpp
 	block.h

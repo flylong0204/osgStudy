@@ -100,7 +100,7 @@ int main( int argc, char **argv )
    osgViewer::Viewer viewer;
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
+   pathList.push_back("../nps/T72-tank/");
    osgDB::setDataFilePathList(pathList);
 
    tankNode = osgDB::readNodeFile("t72-tank_des.flt");

@@ -6,7 +6,6 @@
 #include <osg/Texture2D>
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
-//#include <osgProducer/Viewer>
 #include <osgViewer/Viewer>
 #include <osg/PositionAttitudeTransform>
 
@@ -16,7 +15,7 @@
 #include <osg/TexGen>
 #include <osg/ShapeDrawable>
 
-#include "../Util/Axis.h"
+#include "../../Util/Axis.h"
 
 osg::Geode* createPyramid()
 {
@@ -35,13 +34,6 @@ osg::Geode* createPyramid()
    //geode we added to the scene.
 
    pyramidGeometry->setVertexArray( pyramidVertices );
-
-   osg::TemplateIndexArray
-      <unsigned int, osg::Array::UIntArrayType,4,4> *pyramidVertIndexArray;
-   pyramidVertIndexArray = 
-      new osg::TemplateIndexArray<unsigned int, osg::Array::UIntArrayType,4,4>;
-   
-   //pyramidGeometry->setVertexIndices(pyramidVertIndexArray);
 
    osg::DrawElementsUInt* pyramidBase = 
       new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 3);
@@ -79,25 +71,15 @@ osg::Geode* createPyramid()
    pyramidFaceFour->push_back(4);
    pyramidGeometry->addPrimitiveSet(pyramidFaceFour);
 
-   osg::Vec4Array* colors = new osg::Vec4Array;
-   colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f) ); //index 0 red
-   colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f) ); //index 1 green
-   colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f) ); //index 2 blue
-   colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f) ); //index 3 white
+   /*! 设置每个顶点的颜色值 */
+   osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array;
+   colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f)); //index 0 red
+   colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f)); //index 1 green
+   colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f)); //index 2 blue
+   colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f)); //index 3 white
+   colors->push_back(osg::Vec4(0.0f, 1.0f, 1.0f, 1.0f));
+   pyramidGeometry->setColorArray(colors.get(), osg::Array::BIND_PER_VERTEX);
 
-   osg::TemplateIndexArray
-      <unsigned int, osg::Array::UIntArrayType,4,4> *colorIndexArray;
-   colorIndexArray = 
-      new osg::TemplateIndexArray<unsigned int, osg::Array::UIntArrayType,4,4>;
-   colorIndexArray->push_back(0); // vertex 0 assigned color array element 0
-   colorIndexArray->push_back(1); // vertex 1 assigned color array element 1
-   colorIndexArray->push_back(2); // vertex 2 assigned color array element 2
-   colorIndexArray->push_back(3); // vertex 3 assigned color array element 3
-   colorIndexArray->push_back(0); // vertex 4 assigned color array element 0
-
-   pyramidGeometry->setColorArray(colors, osg::Array::BIND_PER_VERTEX);
-   //pyramidGeometry->setColorIndices(colorIndexArray);
-   //pyramidGeometry->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
 
    osg::Vec2Array* texcoords = new osg::Vec2Array(5);
    (*texcoords)[0].set(0.00f,0.0f);
@@ -113,13 +95,12 @@ osg::Geode* createPyramid()
 
 int main()
 {
-
-   //osgProducer::Viewer viewer;
 	osgViewer::Viewer viewer;
 
    // Declare a group to act as root node of a scene:
    osg::Group* root = new osg::Group();
 
+   /*! 单位立方体 */
    // Declare a box class (derived from shape class) instance
    // This constructor takes an osg::Vec3 to define the center
    //  and a float to define the height, width and depth.
@@ -135,20 +116,18 @@ int main()
    osg::ShapeDrawable* unitCubeDrawable = new osg::ShapeDrawable(unitCube);
 
    // Declare a instance of the geode class: 
-   osg::Geode* basicShapesGeode = new osg::Geode();
-
-   // Add the unit cube drawable to the geode:
-   basicShapesGeode->addDrawable(unitCubeDrawable);
+   osg::Geode* unitCubeGeode = new osg::Geode();
+   unitCubeGeode->addDrawable(unitCubeDrawable);
 
    // Add the goede to the scene:
-   root->addChild(basicShapesGeode);
+   root->addChild(unitCubeGeode);
 
+   /*! 单位球体 */
    osg::Sphere* unitSphere = new osg::Sphere( osg::Vec3(0,0,0), 1.0);
    osg::ShapeDrawable* unitSphereDrawable = new osg::ShapeDrawable(unitSphere);
    unitSphereDrawable->setColor( osg::Vec4(0.1, 0.1, 0.1, 0.1) );
 
-   osg::PositionAttitudeTransform* unitSphereXForm = 
-      new osg::PositionAttitudeTransform();
+   osg::PositionAttitudeTransform* unitSphereXForm = new osg::PositionAttitudeTransform();
    unitSphereXForm->setPosition(osg::Vec3(3.0,0,0));
 
    osg::Geode* unitSphereGeode = new osg::Geode();
@@ -156,6 +135,7 @@ int main()
    unitSphereXForm->addChild(unitSphereGeode);
    unitSphereGeode->addDrawable(unitSphereDrawable);
 
+   /*! 四面体金字塔 */
    osg::Geode* pyramidGeode = createPyramid();
    
    osg::PositionAttitudeTransform* pyramidXForm = 
@@ -164,60 +144,55 @@ int main()
    root->addChild(pyramidXForm);
    pyramidXForm->addChild(pyramidGeode);
 
+   /*! 加载纹理图片 */
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
    pathList.push_back("F:/osg/OpenSceneGraphData/Images");
    osgDB::setDataFilePathList(pathList);
 
-   osg::Texture2D* KLN89FaceTexture = new osg::Texture2D;
-   osg::setNotifyLevel(osg::DEBUG_INFO);
-
+   osg::ref_ptr<osg::Texture2D> KLN89FaceTexture = new osg::Texture2D;
+   //osg::setNotifyLevel(osg::DEBUG_INFO);
    // protect from being optimized away as static state:
    KLN89FaceTexture->setDataVariance(osg::Object::DYNAMIC); 
-   osg::Image* klnFace = osgDB::readImageFile("skymap.jpg");
+   osg::ref_ptr<osg::Image> klnFace = osgDB::readImageFile(
+	   //"skymap.jpg"
+	   "../nps/KLN89FaceB.tga"
+   );
    if (!klnFace)
    {
       std::cout << " couldn't load texture, quitting." << std::endl;
       return -1;
    }
-   KLN89FaceTexture->setImage(klnFace);
+   KLN89FaceTexture->setImage(klnFace.get());
 
-   // Declare a state set for 'BLEND' texture mode
+   /*! 纹理的环境模式为 blend */
    osg::StateSet* blendStateSet = new osg::StateSet();
-
-   // Declare a TexEnv instance, set the mode to 'BLEND'
    osg::TexEnv* blendTexEnv = new osg::TexEnv;
    blendTexEnv->setMode(osg::TexEnv::BLEND);
+   blendStateSet->setTextureAttributeAndModes(0,KLN89FaceTexture.get(),osg::StateAttribute::ON);
+   blendStateSet->setTextureAttribute(0,blendTexEnv, osg::StateAttribute::ON);
 
-   // Turn the attribute of texture 0 'ON'
-   blendStateSet->setTextureAttributeAndModes(0,KLN89FaceTexture,osg::StateAttribute::ON);
-   // Set the texture texture environment for texture 0 to the 
-   //  texture envirnoment we declared above:
-   blendStateSet->setTextureAttribute(0,blendTexEnv);
-
+   /*! 纹理的环境模式为 DECAL*/
    osg::StateSet* decalStateSet = new osg::StateSet();
    osg::TexEnv* decalTexEnv = new osg::TexEnv();
    decalTexEnv->setMode(osg::TexEnv::DECAL);
+   decalStateSet->setTextureAttributeAndModes(0,KLN89FaceTexture.get(),osg::StateAttribute::ON);
+   decalStateSet->setTextureAttribute(0,decalTexEnv, osg::StateAttribute::ON);
 
-   decalStateSet->setTextureAttributeAndModes(0,KLN89FaceTexture,osg::StateAttribute::ON);
-   decalStateSet->setTextureAttribute(0,decalTexEnv);
+   //osg::StateSet *ssPyramid = pyramidGeode->getOrCreateStateSet();
+   //ssPyramid->setTextureAttributeAndModes(0, KLN89FaceTexture.get(), osg::StateAttribute::ON|osg::StateAttribute::OVERRIDE);
 
-   root->setStateSet(decalStateSet);
+   root->setStateSet(blendStateSet);
+   //unitCubeGeode->setStateSet(blendStateSet);
    unitSphereGeode->setStateSet(decalStateSet);
 
-   root->addChild(Axis::createAxis(5.0f, 5.0f, 5.0f));
+   root->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::ON);
 
-   //viewer.setUpViewer(osgProducer::Viewer::STANDARD_SETTINGS);
+   root->addChild(Util::Axis::createAxis(5.0f, 5.0f, 5.0f));
+
    viewer.setUpViewInWindow(100, 100, 1024, 768);
    viewer.setSceneData( root );
 
    viewer.realize();
-
-   //while( !viewer.done() )
-   //{
-   //   viewer.sync();
-   //   viewer.update();
-   //   viewer.frame();
-   //} 
    viewer.run();
 
    return 0;

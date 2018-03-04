@@ -249,38 +249,20 @@ osg::Node* createLights(osg::ref_ptr<osg::StateSet> ssRoot)
 	ssRoot->setMode(GL_LIGHT1, osg::StateAttribute::ON);
 
 	osg::ref_ptr<osg::Group> lightGroup = new osg::Group;
-
-	// create a positional light.
-	osg::ref_ptr<osg::Light> myLight1 = new osg::Light;
-	myLight1->setLightNum(0);
-	//myLight1->setPosition(osg::Vec4(0.0,0.0,0.0,1.0f));    //最后一个参数如果不为0,则为方向性光源
-	myLight1->setAmbient(osg::Vec4(1.0f,0.0f,0.0f,1.0f));
-	myLight1->setDiffuse(osg::Vec4(1.0f,0.0f,0.0f,1.0f));
-	myLight1->setSpotCutoff(1);
-	myLight1->setSpotExponent(150.0f);
-	myLight1->setDirection(osg::Vec3(0.0f,1.0f,0.0f));
-
-	osg::ref_ptr<osg::LightSource> lightS1 = new osg::LightSource;    
-	lightS1->setLight(myLight1.get());
-	//lightS1->setLocalStateSetModes(osg::StateAttribute::ON); 
-	//lightS1->setStateSetModes(*ssRoot.get(),osg::StateAttribute::ON);
-	//lightS1->setUpdateCallback(new CLightUpdateCallback(tracker.get()));
-	//lightGroup->addChild(lightS1.get());
-
 	// create a directional light.
-	osg::ref_ptr<osg::Light> myLight2 = new osg::Light;
-	myLight2->setLightNum(1);
-	//myLight2->setPosition(osg::Vec4(0.0,0.0,100.0,0.0f));
-	myLight2->setAmbient(osg::Vec4(1.0f,1.0f,1.0f,1.0f));
-	myLight2->setDiffuse(osg::Vec4(1.0f,1.0f,1.0f,1.0f));
+	osg::ref_ptr<osg::Light> myLight = new osg::Light;
+	myLight->setLightNum(0);
+	myLight->setPosition(osg::Vec4(0.0,0.0,100.0,0.0f));
+	myLight->setAmbient(osg::Vec4(1.0f,1.0f,1.0f,1.0f));
+	myLight->setDiffuse(osg::Vec4(1.0f,1.0f,1.0f,1.0f));
 
-	osg::ref_ptr<osg::LightSource> lightS2 = new osg::LightSource;    
-	lightS2->setLight(myLight2.get());
-	lightS2->setLocalStateSetModes(osg::StateAttribute::ON); 
+	osg::ref_ptr<osg::LightSource> lightS = new osg::LightSource;    
+	lightS->setLight(myLight.get());
+	lightS->setLocalStateSetModes(osg::StateAttribute::ON); 
 
-	lightS2->setStateSetModes(*ssRoot,osg::StateAttribute::ON);
+	lightS->setStateSetModes(*ssRoot,osg::StateAttribute::ON);
 
-	lightGroup->addChild(lightS2);
+	lightGroup->addChild(lightS);
 
 	return lightGroup.release();
 }

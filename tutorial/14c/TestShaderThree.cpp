@@ -32,8 +32,8 @@ int main( int argc, char **argv )
       new osg::PositionAttitudeTransform();
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
-   pathList.push_back("../asserts/nps/JoeDirt/");
+   pathList.push_back("../nps/T72-tank/");
+   pathList.push_back("../nps/JoeDirt/");
    osgDB::setDataFilePathList(pathList);
 
    tankNode = osgDB::readNodeFile("T72-tank_des.flt");
@@ -63,8 +63,8 @@ int main( int argc, char **argv )
    osg::Shader* bumpVertexObject =  new osg::Shader( osg::Shader::VERTEX );
    osg::Shader* bumpFragmentObject = new osg::Shader( osg::Shader::FRAGMENT );
 
-   bool ok = loadShaderSource( bumpVertexObject, "../asserts/nps/shaders/bumpmap.vert" )
-          && loadShaderSource( bumpFragmentObject, "../asserts/nps/shaders/bumpmap.frag" ) ;
+   bool ok = loadShaderSource( bumpVertexObject, "../nps/shaders/bumpmap.vert" )
+          && loadShaderSource( bumpFragmentObject, "../nps/shaders/bumpmap.frag" ) ;
 
    if(!ok)
    {
@@ -88,7 +88,7 @@ int main( int argc, char **argv )
 
    osg::Texture2D* tankBodyNormalMap = new osg::Texture2D;
    tankBodyNormalMap->setDataVariance(osg::Object::DYNAMIC); 
-   osg::Image* tankBody = osgDB::readImageFile("../asserts/nps/TankBump.bmp");
+   osg::Image* tankBody = osgDB::readImageFile("../nps/TankBump.bmp");
    if (!tankBody)
    {
       std::cout << " couldn't find texture, quiting." << std::endl;

@@ -51,9 +51,9 @@ int main(int argc, char **argv)
    viewer.addEventHandler(new osgViewer::WindowSizeHandler);
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
-   pathList.push_back("../asserts/nps/JoeDirt/");
-   pathList.push_back("../asserts/nps/");
+   pathList.push_back("../nps/T72-tank/");
+   pathList.push_back("../nps/JoeDirt/");
+   pathList.push_back("../nps/");
    osgDB::setDataFilePathList(pathList);
 
    terrainNode = osgDB::readNodeFile("JoeDirt.flt");

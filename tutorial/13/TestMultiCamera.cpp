@@ -39,8 +39,8 @@ bool setupScene(osg::ref_ptr<osg::Group> &rootNode, osg::ref_ptr<osg::Group> &ow
 	rootNode = new osg::Group();
 
 	osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-	pathList.push_back("../asserts/nps/T72-tank/");
-	pathList.push_back("../asserts/nps/JoeDirt/");
+	pathList.push_back("../nps/T72-tank/");
+	pathList.push_back("../nps/JoeDirt/");
 	osgDB::setDataFilePathList(pathList);
 
 	osg::ref_ptr<osg::Node> terrainNode = osgDB::readNodeFile("JoeDirt.flt");

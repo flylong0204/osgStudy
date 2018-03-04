@@ -62,12 +62,7 @@ void toggleTankOrbiterView()
 osg::TextureCubeMap* readCubeMap()
 {
 	osg::TextureCubeMap* cubemap = new osg::TextureCubeMap;
-	//#define CUBEMAP_FILENAME(face) "nvlobby_" #face ".png"
-	//#define CUBEMAP_FILENAME(face) "Cubemap_axis/" #face ".png"
-#define CUBEMAP_FILENAME(face) "../asserts/nps/skyBmp/" #face ".bmp"
-	/*osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-	pathList.push_back("..\\data\\T72-tank\\");
-	osgDB::setDataFilePathList(pathList);*/
+#define CUBEMAP_FILENAME(face) "../nps/skyBmp/" #face ".bmp"
 
 	osg::Image* imagePosX = osgDB::readImageFile(CUBEMAP_FILENAME(front));
 	osg::Image* imageNegX = osgDB::readImageFile(CUBEMAP_FILENAME(left));
@@ -218,8 +213,8 @@ int main()
    osg::PositionAttitudeTransform* tankXform = NULL;
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
-   pathList.push_back("../asserts/nps/JoeDirt/");;
+   pathList.push_back("../nps/T72-tank/");
+   pathList.push_back("../nps/JoeDirt/");;
    osgDB::setDataFilePathList(pathList);
 
    groundNode = osgDB::readNodeFile("JoeDirt.flt");
