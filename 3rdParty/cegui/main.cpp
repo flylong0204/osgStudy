@@ -41,9 +41,7 @@ public:
     void loadScheme();
     void loadFont();
     void loadLayout();
-
-	void bindViewer(osgViewer::Viewer *viewer);
-
+	
     void drawImplementation(osg::RenderInfo& renderInfo) const;
 
 protected:   
@@ -56,7 +54,7 @@ protected:
 	mutable bool mInitial;
 	mutable unsigned int mContextID;
 	mutable double mLastTime;
-	osgViewer::Viewer *localViewer;
+	CEGUI::OpenGLRenderer *mRender;
 };
 
 
@@ -206,29 +204,23 @@ CEGUIDrawable::CEGUIDrawable()
     setEventCallback(new CEGUIEventCallback());
 
 	CEGUI::OpenGLRenderer &myRender = CEGUI::OpenGLRenderer::bootstrapSystem();
+	mRender = &myRender;
 }
 
 CEGUIDrawable::~CEGUIDrawable()
 {}
 
-static int localCount = 0;
 bool CEGUIDrawable::clickButton(const CEGUI::EventArgs & e)
 {
 	std::cout << "click button" << std::endl;
-	if (localViewer)
-	{
-		localViewer->getEventQueue()->userEvent(new UserItem(localCount++));
-	}
+	g_Count++;
 	return false;
 }
 
 bool CEGUIDrawable::changedScrollbarPosition(const CEGUI::EventArgs & e)
 {	
 	std::cout << "scrollbar change position" << std::endl;
-	if (localViewer)
-	{
-		localViewer->getEventQueue()->userEvent(new UserItem(localCount++));
-	}
+	g_Count++;
 	return false;
 }
 
@@ -342,11 +334,6 @@ void CEGUIDrawable::loadLayout()
 
 }
 
-void CEGUIDrawable::bindViewer(osgViewer::Viewer * viewer)
-{
-	localViewer = viewer;
-}
-
 void CEGUIDrawable::drawImplementation(osg::RenderInfo& renderInfo) const
 {
 	if (!mInitial) 
@@ -358,10 +345,22 @@ void CEGUIDrawable::drawImplementation(osg::RenderInfo& renderInfo) const
 	{
 		osg::State *ss = renderInfo.getState();
 		
-		//ss->disableAllVertexArrays();
+		ss->disableAllVertexArrays();
 
 		glPushMatrix();
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+		osg::Viewport *viewport = renderInfo.getCurrentCamera()->getViewport();
+		if (viewport)
+		{
+			const CEGUI::Sizef &size = mRender->getDisplaySize();
+			if (size.d_width != viewport->width() ||
+				size.d_height != viewport->height())
+			{
+				CEGUI::System::getSingleton().notifyDisplaySizeChanged(
+					CEGUI::Sizef(viewport->width(), viewport->height()));
+			}
+		}
 
 		double now = (ss->getFrameStamp() ? ss->getFrameStamp()->getSimulationTime() : 0.0);
 		CEGUI::System::getSingleton().injectTimePulse((now -mLastTime) / 1000.0);
@@ -414,7 +413,6 @@ int main( int argc, char **argv )
     cd->loadScheme();
     cd->loadFont();
     cd->loadLayout();
-	cd->bindViewer(&viewer);
 	viewer.getCamera()->getGraphicsContext()->releaseContext();
 
     osg::ref_ptr<osg::Group> root = new osg::Group;
@@ -449,15 +447,15 @@ int main( int argc, char **argv )
 		{
 			if (g_Count > 0)
 			{
-				osg::Group *root = dynamic_cast<osg::Group*>(viewer.getSceneData());
-				if (root)
+				osg::Group *scene = dynamic_cast<osg::Group*>(viewer.getSceneData());
+				if (scene)
 				{
-					std::cout << "here add " << std::endl;
+					//std::cout << "here add " << std::endl;
 					std::srand(time(NULL));
 					float x = 0.5 + std::rand() % 100 / 100.0f;
 					float y = 0.5 + std::rand() % 100 / 100.0f;
 					float z = 0.5 + std::rand() % 100 / 100.0f;
-					root->addChild(Util::Shape::createBox(osg::Vec3(x, y, z)));
+					scene->addChild(Util::Shape::createBox(osg::Vec3(x, y, z)));
 				}
 				g_Count--;
 			}

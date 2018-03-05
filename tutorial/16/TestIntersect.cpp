@@ -57,9 +57,9 @@ int main( int argc, char **argv )
    osg::PositionAttitudeTransform* tankXform = new osg::PositionAttitudeTransform();
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
-   pathList.push_back("../asserts/nps/T72-tank/");
-   pathList.push_back("../asserts/nps/JoeDirt/");
-   pathList.push_back("../asserts/nps/");
+   pathList.push_back("../nps/T72-tank/");
+   pathList.push_back("../nps/JoeDirt/");
+   pathList.push_back("../nps/");
    osgDB::setDataFilePathList(pathList);
 
    tankNode = osgDB::readNodeFile("T72-tank_des.flt");
@@ -75,22 +75,21 @@ int main( int argc, char **argv )
    double tankXPosition = 5.0;
    double tankYPosition = -3.0;
 
-   osgUtil::LineSegmentIntersector *tankLocationSegment = new osgUtil::LineSegmentIntersector(
+   osg::ref_ptr<osgUtil::LineSegmentIntersector> tankPicker = new osgUtil::LineSegmentIntersector(
 	   osg::Vec3(tankXPosition, tankYPosition, 999),
       osg::Vec3(tankXPosition, tankYPosition, -999) );
+   
+   osgUtil::IntersectionVisitor ivTankElevation(tankPicker.get());
+   terrainNode->accept(ivTankElevation);
 
-   osgUtil::IntersectionVisitor findTankElevationVisitor(tankLocationSegment);
-   terrainNode->accept(findTankElevationVisitor);
-
-   osgUtil::IntersectionVisitor tankElevationLocatorHits;
-   tankElevationLocatorHits = findTankElevationVisitor.getIntersector();
-   if ( tankElevationLocatorHits.getint.empty() )
+   if (!tankPicker->containsIntersections())
    {
       std::cout << " couldn't place tank on terrain" << std::endl;
       return -1;
    }
-   heightTestResults = tankElevationLocatorHits.getfir.front();
-   osg::Vec3 terrainHeight = heightTestResults.getWorldIntersectPoint();//获得交点坐标
+   osgUtil::LineSegmentIntersector::Intersections listIntersection = tankPicker->getIntersections();
+   osgUtil::LineSegmentIntersector::Intersections::iterator it = listIntersection.begin();
+   osg::Vec3 terrainHeight = it->getWorldIntersectPoint();//获得交点坐标
 
    tankXform->setPosition( terrainHeight );
    tankXform->setAttitude( osg::Quat(osg::DegreesToRadians(-45.0), osg::Vec3(0,0,1) ) );
@@ -122,52 +121,39 @@ int main( int argc, char **argv )
 
    srand(time(0));  // Initialize random number generator.
 
-   osgUtil::IntersectionVisitor isectVisitor;
    osgUtil::LineSegmentIntersector* terrainIsect[NUMBER_O_SHRUBS];
 
+   /*! 随机构造线段 */
    int randomX, randomY;
-
-   std::cout<<"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&随机器数为："<<std::endl;
    for (int i=0; i< NUMBER_O_SHRUBS; i++ )
    {  
 
 	  int x=rand();
 	  int y=rand();
-	  std::cout<<x<<","<<y<<std::endl;
       randomX = ( x % 200) + 1;
       randomY = ( y % 200) + 1;
-      std::cout << randomX <<", " << randomY << std::endl;
       terrainIsect[i] = new osgUtil::LineSegmentIntersector(//垂直于地面的射线求交点坐标
          osg::Vec3(randomX, randomY, 999) ,
          osg::Vec3(randomX, randomY, -999) );
-      //isectVisitor.addLineSegment(terrainIsect[i]);
    }
-   terrainNode->accept(isectVisitor);
-   std::cout<<"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&随机器数为："<<std::endl;
 
    osg::Drawable* shrubDrawable[NUMBER_O_SHRUBS];
    int numToadd=0;
    for (int j = 0 ; j < NUMBER_O_SHRUBS; j ++)
    {
       float randomScale = ((rand() % 15) + 10 ) / 10.0;
-	  std::cout<<randomScale<<std::endl;
       shrubDrawable[j] = createShrub( randomScale, billBoardStateSet);
-	  isectVisitor->accept(te)
-      osgUtil::IntersectionVisitor hitList = isectVisitor.getHitList(terrainIsect[j]);
-      if (! hitList.empty() )
-      {    
-         osgUtil::Hit firstHit = hitList.front();
-         osg::Vec3 shrubPosition = firstHit.getWorldIntersectPoint();
+	  osgUtil::IntersectionVisitor ivNode(terrainIsect[j]);
+	  terrainNode->accept(ivNode);
+      if (terrainIsect[j]->containsIntersections())
+      { 
+		  osgUtil::LineSegmentIntersector::Intersections listIntersection2 = terrainIsect[j]->getIntersections();
+		  osgUtil::LineSegmentIntersector::Intersections::iterator it2 = listIntersection2.begin();
+         osg::Vec3 shrubPosition = it2->getWorldIntersectPoint();
 
-         // osg::Vec3d shrubPosition = isectVisitor.getHitList(terrainIsect[j]).front().getWorldIntersectPoint();
-         shrubBillBoard->addDrawable( shrubDrawable[j] , shrubPosition );
-		 std::cout<<"＊＊＊＊＊＊＊＊＊＊＊＊＊添加BillBoard成功!"<<std::endl;
+		 shrubBillBoard->addDrawable( shrubDrawable[j] , shrubPosition );
 		 numToadd++;
       }
-	  else
-	  {
-		  std::cout<<"无交点!"<<std::endl;
-	  }
    }
    std::cout<<"一共添加了: "<<numToadd<<"个BillBoard!"<<std::endl;
 
