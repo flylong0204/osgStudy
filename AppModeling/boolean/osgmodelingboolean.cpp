@@ -20,11 +20,14 @@
 #include <osgDB/WriteFile>
 #include <osgUtil/TriStripVisitor>
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 
 #include <osgModeling/Extrude>
 #include <osgModeling/Lathe>
 #include <osgModeling/Nurbs>
 #include <osgModeling/BoolOperator>
+
+#include "../../Util/Axis.h"
 
 osg::ref_ptr<osg::Geometry> createFirstOperator()
 {
@@ -121,15 +124,18 @@ int main( int argc, char** argv )
     // and the generated geometry. There must be a long way to go...
     osg::ref_ptr<osg::Group> root = new osg::Group;
     root->addChild( createBoolean().get() );
+	root->addChild(Util::Axis::createAxis(5.0f, 5.0f, 5.0f));
 
     osgViewer::Viewer viewer;
-    viewer.setSceneData( root );
+	viewer.addEventHandler(new osgViewer::StatsHandler);
+	viewer.addEventHandler(new osgViewer::WindowSizeHandler);
+	viewer.setSceneData( root );
     viewer.run();
 
     // You could save the geometry data to a file and review/modify it later. And this might be the main reason to have a
     // computational boolean method here.
     // If just for displaying, maybe you would choose the CSG method using stencil buffers instead. I will consider to implement
     // the real-time CSG boolean operator in future versions.
-    osgDB::writeNodeFile( *root, "./node.osg" );
+    osgDB::writeNodeFile( *root, "../modeling/node.osg" );
     return 0;
 }

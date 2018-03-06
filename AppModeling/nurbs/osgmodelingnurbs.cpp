@@ -20,6 +20,7 @@
 #include <osg/PositionAttitudeTransform>
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 
 #include <osgModeling/Loft>
 #include <osgModeling/Bezier>
@@ -191,7 +192,7 @@ osg::ref_ptr<osg::Geode> createBezierTeapot()
             geode->addDrawable( new osgModeling::BezierSurface(3, 4, 12, 4, &s[0][0][0], 10, 10) );
         }
     }
-    return geode;
+    return geode.release();
 }
 
 osg::ref_ptr<osg::Geode> createNurbsCircle()
@@ -274,15 +275,18 @@ osg::ref_ptr<osg::Geode> createNurbsSphere()
     // and V corresponds to T. So we may have to flip our image to fit the auto-generated texcoords sometime.
     // It is suggested to use customized texcoords or osg::TexGen node instead.
     sphere->getOrCreateStateSet()->setTextureAttributeAndModes(
-        0, new osg::Texture2D(osgDB::readImageFile("land_shallow_topo_2048_flip.jpg")) );
+        0, new osg::Texture2D(osgDB::readImageFile("../modeling/land_shallow_topo_2048_flip.jpg")) );
 
     osg::ref_ptr<osg::Geode> geode = new osg::Geode;
     geode->addDrawable( sphere.get() );
     return geode;
 }
 
+#include <stdio.h>
 int main( int argc, char** argv )
 {
+	int i = 0;
+	getchar();
     osg::ref_ptr<osg::PositionAttitudeTransform> teapot = new osg::PositionAttitudeTransform;
     teapot->setPosition( osg::Vec3(-8.0f, 0.0f, 0.0f) );
     teapot->addChild( createBezierTeapot().get() );
@@ -301,6 +305,8 @@ int main( int argc, char** argv )
     root->addChild( sphere.get() );
 
     osgViewer::Viewer viewer;
-    viewer.setSceneData( root );
+	viewer.addEventHandler(new osgViewer::StatsHandler);
+	viewer.addEventHandler(new osgViewer::WindowSizeHandler);
+	viewer.setSceneData( root );
     return viewer.run();
 }

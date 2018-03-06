@@ -21,6 +21,7 @@
 #include <osg/Texture2D>
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 
 #include <osgModeling/Model>
 #include <osgModeling/ModelVisitor>
@@ -132,6 +133,8 @@ int main( int argc, char** argv )
     root->accept( bspVisitor );
 
     osgViewer::Viewer viewer;
+	viewer.addEventHandler(new osgViewer::StatsHandler);
+	viewer.addEventHandler(new osgViewer::WindowSizeHandler);
     viewer.setSceneData( root );
     return viewer.run();
 }

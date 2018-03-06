@@ -19,6 +19,7 @@
 #include <osgDB/ReadFile>
 #include <osgUtil/TriStripVisitor>
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 
 #include <osgModeling/Utilities>
 #include <osgModeling/Subdivision>
@@ -105,7 +106,7 @@ int main( int argc, char** argv )
 
     osg::ref_ptr<osg::Group> group = dynamic_cast<osg::Group*>( osgDB::readNodeFiles(arguments) );
     if ( !group.valid() || !group->getNumChildren() )
-        group = dynamic_cast<osg::Group*>( osgDB::readNodeFile("./pawn.osg") );
+        group = dynamic_cast<osg::Group*>( osgDB::readNodeFile("../modeling/pawn.osg") );
     if ( !group.valid() || !group->getNumChildren() )
     {
         std::cout << "This example only accepts a root group node with one geode attached." << std::endl;
@@ -120,6 +121,8 @@ int main( int argc, char** argv )
     }
 
     osgViewer::Viewer viewer;
+	viewer.addEventHandler(new osgViewer::StatsHandler);
+	viewer.addEventHandler(new osgViewer::WindowSizeHandler);
     viewer.setSceneData( createSubd(geode->getDrawable(0), method, level).get() );
     return viewer.run();
 }

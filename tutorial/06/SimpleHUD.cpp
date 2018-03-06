@@ -14,19 +14,13 @@
 #include <osg/ShapeDrawable>
 #include <osg/Geometry>
 
+#include "../../Util/Axis.h"
+
 int main()
-{
-   // A geometry node for our HUD:
-   osg::Geode* HUDGeode = new osg::Geode();
-   // Text instance for HUD:
-   osgText::Text* textOne = new osgText::Text();
-   // Text for label that will follow the tank:
-   osgText::Text* tankLabel = new osgText::Text();
-   // Projection node for defining view frustrum for HUD:
-   osg::Projection* HUDProjectionMatrix = new osg::Projection;
-   
+{   
    osgViewer::Viewer viewer;
    osg::Group* root = new osg::Group();
+   root->addChild(Util::Axis::createAxis(10.f, 10.f, 10.0f));
 
    osgDB::FilePathList pathList = osgDB::getDataFilePathList();
    pathList.push_back("../nps/T72-tank/");
@@ -38,6 +32,7 @@ int main()
    osg::Node* tankNode = osgDB::readNodeFile("t72-tank_des.flt");
    osg::Node* terrainNode = osgDB::readNodeFile("JoeDirt.flt");
 
+   /*! tank 的位置信息 */
    // Initialize tranform to be used for positioning the tank
    // assign values for the transform
    osg::PositionAttitudeTransform* tankXform = new osg::PositionAttitudeTransform();
@@ -49,6 +44,9 @@ int main()
    root->addChild(tankXform);
    tankXform->addChild(tankNode);
 
+   /*! 之前很多看到的例子都是通过camera来设置，这里看到不同的方法，使用变换矩阵来保证世界坐标的决定性 */
+   // Projection node for defining view frustrum for HUD:
+   osg::Projection* HUDProjectionMatrix = new osg::Projection;
    // Initialize the projection matrix for viewing everything we
    // will add as descendents of this node. Use screen coordinates
    // to define the horizontal and vertical extent of the projection
@@ -70,11 +68,17 @@ int main()
    // and positioned with this model view matrix.
    root->addChild(HUDProjectionMatrix);
    HUDProjectionMatrix->addChild(HUDModelViewMatrix);
+   
+   // A geometry node for our HUD:
+   osg::Geode* HUDGeode = new osg::Geode();
 
    // Add the Geometry node to contain HUD geometry as a child of the
    // HUD model view matrix.
    // (See figure "n")
    HUDModelViewMatrix->addChild( HUDGeode );
+
+   // Text instance for HUD:
+   osgText::Text* textOne = new osgText::Text();
 
    // Add the text (Text class is derived from drawable) to the geode:
    HUDGeode->addDrawable( textOne );
@@ -86,6 +90,9 @@ int main()
    textOne->setAxisAlignment(osgText::Text::SCREEN);
    textOne->setPosition( osg::Vec3(360,365,-1.5) );
    textOne->setColor( osg::Vec4(199, 77, 15, 1) );
+
+   // Text for label that will follow the tank:
+   osgText::Text* tankLabel = new osgText::Text();
 
    // Set up the parameters for the text label for the tank
    // align text with tank's SCREEN.

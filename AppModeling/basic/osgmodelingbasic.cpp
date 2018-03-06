@@ -20,12 +20,15 @@
 #include <osg/PositionAttitudeTransform>
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 
 #include <osgModeling/Helix>
 #include <osgModeling/Bezier>
 #include <osgModeling/Extrude>
 #include <osgModeling/Lathe>
 #include <osgModeling/Loft>
+
+#include "../../Util/Axis.h"
 
 const double xInterval = 4.0f;
 
@@ -83,7 +86,7 @@ osg::ref_ptr<osg::Node> createExtrusion()
     // The extruding direction corresponds to the T direction of texture, and the unfolded profile
     // will be mapped on the S direction.
     geom1->getOrCreateStateSet()->setTextureAttributeAndModes(
-        0, new osg::Texture2D(osgDB::readImageFile("osg_banner.jpg")) );
+        0, new osg::Texture2D(osgDB::readImageFile("../modeling/osg_banner.jpg")) );
 
     // Second, a pentagram is built. Profile data is read from a double array.
     // This time, a convenient constructor is used to specify parameters for extrusion.
@@ -129,7 +132,7 @@ osg::ref_ptr<osg::Node> createLathe()
     // For a revolution, the contour (profile) will be mapped on the T direction of texture,
     // and the rotating segments on S direction.
     geom1->getOrCreateStateSet()->setTextureAttributeAndModes(
-        0, new osg::Texture2D(osgDB::readImageFile("osg_banner2.jpg")) );
+        0, new osg::Texture2D(osgDB::readImageFile("../modeling/osg_banner2.jpg")) );
 
     // Second, we will create a bottle-like model with a Bezier curve as profile.
     double cp[4][3] = {
@@ -200,7 +203,7 @@ osg::ref_ptr<osg::Node> createLoft()
     // at 't=0.0f' of the texture and 'section2' at 't=1.0f' of the texture map. The unfolded section shape will be
     // mapped on the S direction for auto-generated texcoords.
     geom2->getOrCreateStateSet()->setTextureAttributeAndModes(
-        0, new osg::Texture2D(osgDB::readImageFile("curtain_flip.jpg")) );
+        0, new osg::Texture2D(osgDB::readImageFile("../modeling/curtain_flip.jpg")) );
 
     osg::ref_ptr<osg::Geode> geode = new osg::Geode;
     geode->addDrawable( geom1.get() );
@@ -226,8 +229,11 @@ int main( int argc, char** argv )
     root->addChild( extrusions.get() );
     root->addChild( revolutions.get() );
     root->addChild( lofts.get() );
+	root->addChild(Util::Axis::createAxis(5.0f, 5.0f, 5.0f));
 
     osgViewer::Viewer viewer;
+	viewer.addEventHandler(new osgViewer::StatsHandler);
+	viewer.addEventHandler(new osgViewer::WindowSizeHandler);
     viewer.setSceneData( root );
     return viewer.run();
 }

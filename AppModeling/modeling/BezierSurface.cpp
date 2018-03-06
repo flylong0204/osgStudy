@@ -52,7 +52,7 @@ BezierSurface::BezierSurface( unsigned int ustride, unsigned int uorder, unsigne
     if ( !_ctrlPts ) _ctrlPts = new osg::Vec3Array;
 
     double* p = ptr;
-    unsigned int uinc = ustride - vorder*vstride;
+    unsigned int uinc = ustride + vorder*vstride;
     for ( unsigned int i=0; i<uorder; i++, p+=uinc )
     {
         for ( unsigned int j=0; j<vorder; j++, p+=vstride )
