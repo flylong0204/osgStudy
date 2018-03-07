@@ -30,13 +30,13 @@ public:
 			}
 			timerInfo->count++;
 		}
-			break;
+		break;
 		case (osgGA::GUIEventAdapter::USER):
 		{
 			const TimerInfo *ti = dynamic_cast<const TimerInfo*>(ea.getUserData());
-			std::cout << "the " << int(ti->count/100) << "th 100 frame " << std::endl;
+			std::cout << "the " << int(ti->count / 100) << "th 100 frame " << std::endl;
 		}
-			break;
+		break;
 		}
 		return false;
 	}
@@ -44,7 +44,7 @@ private:
 	osg::ref_ptr<TimerInfo> timerInfo;
 };
 
-int main( int argc, char** argv )
+int main(int argc, char** argv)
 {
 	osgViewer::Viewer viewer;
 
